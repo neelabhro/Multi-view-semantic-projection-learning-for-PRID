@@ -15,14 +15,14 @@ list = dir(['CUHK03/detected/*.png']);
 n = length(list);
 
 %% Read images
-for i = 1 : n
-    info = imfinfo([imgDir, list(i).name]);
-    images = zeros(info.Height, info.Width, 3, n, 'uint8');
-    images(:,:,:,i) = imread([imgDir, list(i).name]);
-    images1(:,:,:,i) = imresize(images(:,:,:,i),[128 48]);
-end
+%for i = 1 : n
+%    info = imfinfo([imgDir, list(i).name]);
+%    images = zeros(info.Height, info.Width, 3, n, 'uint8');
+%    images(:,:,:,i) = imread([imgDir, list(i).name]);
+%    images1(:,:,:,i) = imresize(images(:,:,:,i),[128 48]);
+%end
 
-imshow(images1(:,:,:,1));
+%imshow(images1(:,:,:,1));
 
     Lu = 0.05*1;
     L = 0.000000001;
@@ -34,15 +34,21 @@ imshow(images1(:,:,:,1));
     beta = 1;
     
     
-    n = 8176;
+    n = 100;
     %843 Persons from Set 1
     %842 Persons for simplicity
     %1 image from each of the 2 views to make probe and gallery
     d = 100;
     k = d;
 
-
-
+    X1 = randi([0, 1], [d,n]);
+    X2 = randi([0, 1], [d,n]);
+    X3 = randi([0, 1], [d,n]);
+    X4 = randi([0, 1], [d,n]);
+    X5 = randi([0, 1], [d,n]);
+    X6 = randi([0, 1], [d,n]);
+    
+    
     U  = randi([0, 1], [d,k]);
     V1 = randi([0, 1], [k,n]);
     V2 = randi([0, 1], [k,n]);
@@ -82,7 +88,7 @@ imshow(images1(:,:,:,1));
 
     
 %% Main algorithm
-    for i = 1:500
+    for i = 1:50
         U  = (( W'*X1 * transpose(V1)) + ( W'*X2 * transpose(V2)))/((( V1 * transpose(V1)) + ( V2 * transpose(V2)) + (Lu*eye(k))));
 
         V1 = (((transpose(U) * U) + (nu + 5*beta + Lv) * eye(k))) \ ((transpose(U) *W'* X1) + (beta* A12 * V2) + (beta* A13 * V3) + (beta* A14 * V4) + (beta* A15 * V5) + (beta* A16 * V6) + nu * P1 * W'*X1);
@@ -99,24 +105,24 @@ imshow(images1(:,:,:,1));
         P5 = (V5 * transpose(X5)) / ((X5 * transpose(X5)) + (Lp/nu)*eye(k));
         P6 = (V6 * transpose(X6)) / ((X6 * transpose(X6)) + (Lp/nu)*eye(k));
         
-        A12  = -2*beta*V1*V2' + 2*A12*V2*V2' + 2*La*A12;
-        A13  = -2*beta*V1*V3' + 2*A13*V3*V3' + 2*La*A13;
-        A14  = -2*beta*V1*V4' + 2*A14*V4*V4' + 2*La*A14;
-        A15  = -2*beta*V1*V5' + 2*A15*V5*V5' + 2*La*A15;
-        A16  = -2*beta*V1*V6' + 2*A16*V6*V6' + 2*La*A16;
-        A23  = -2*beta*V2*V3' + 2*A23*V3*V3' + 2*La*A23;
-        A24  = -2*beta*V2*V4' + 2*A24*V4*V4' + 2*La*A24;
-        A25  = -2*beta*V2*V5' + 2*A25*V5*V5' + 2*La*A25;
-        A26  = -2*beta*V2*V6' + 2*A26*V6*V6' + 2*La*A26;
-        A34  = -2*beta*V3*V4' + 2*A34*V4*V4' + 2*La*A34;
-        A35  = -2*beta*V3*V5' + 2*A35*V5*V5' + 2*La*A35;
-        A36  = -2*beta*V3*V6' + 2*A36*V6*V6' + 2*La*A36;
-        A45  = -2*beta*V4*V5' + 2*A45*V5*V5' + 2*La*A45;
-        A46  = -2*beta*V4*V6' + 2*A46*V6*V6' + 2*La*A46;
-        A56  = -2*beta*V5*V6' + 2*A56*V6*V6' + 2*La*A56;
+        A12  = -2*beta*V1*V2' + 2*A12*(V2)*V2' + 2*La*A12;
+        A13  = -2*beta*V1*V3' + 2*A13*(V3)*V3' + 2*La*A13;
+        A14  = -2*beta*V1*V4' + 2*A14*(V4)*V4' + 2*La*A14;
+        A15  = -2*beta*V1*V5' + 2*A15*(V5)*V5' + 2*La*A15;
+        A16  = -2*beta*V1*V6' + 2*A16*(V6)*V6' + 2*La*A16;
+        A23  = -2*beta*V2*V3' + 2*A23*(V3)*V3' + 2*La*A23;
+        A24  = -2*beta*V2*V4' + 2*A24*(V4)*V4' + 2*La*A24;
+        A25  = -2*beta*V2*V5' + 2*A25*(V5)*V5' + 2*La*A25;
+        A26  = -2*beta*V2*V6' + 2*A26*(V6)*V6' + 2*La*A26;
+        A34  = -2*beta*V3*V4' + 2*A34*(V4)*V4' + 2*La*A34;
+        A35  = -2*beta*V3*V5' + 2*A35*(V5)*V5' + 2*La*A35;
+        A36  = -2*beta*V3*V6' + 2*A36*(V6)*V6' + 2*La*A36;
+        A45  = -2*beta*V4*V5' + 2*A45*(V5)*V5' + 2*La*A45;
+        A46  = -2*beta*V4*V6' + 2*A46*(V6)*V6' + 2*La*A46;
+        A56  = -2*beta*V5*V6' + 2*A56*(V6)*V6' + 2*La*A56;
         
-        for j = 1:50
-            Vw = 2*X1*X1'*W + 2*X2*X2'*W + 2*X3*X3'*W + 2*X4*X4'*W + 2*X5*X5'*W + 2*X6*X6'*W - 2*(X1*V1')*U' - 2*(X2*V2')*U' - 2*(X3*V3')*U' - 2*(X4*V4')*U' - 2*(X5*V5')*U' - 2*(X6*V6')*U' - 2*nu*X1*V1'*P1' - 2*nu*X2*V2'*P2' - 2*nu*X3*V3'*P3' - 2*nu*X4*V4'*P4' - 2*nu*X5*V5'*P5' - 2*nu*X6*V6'*P6' + 2*nu*X1*X1'*W*(P1'*P1) + 2*nu*X2*X2'*W*(P2'*P2) + 2*nu*X3*X3'*W*(P3'*P3) + 2*nu*X4*X4'*W*(P4'*P4) + 2*nu*X5*X5'*W*(P5'*P5) + 2*nu*X6*X6'*W*(P6'*P6);
+        for j = 1:5
+            Vw = 2*(X1)*X1'*W + 2*(X2)*X2'*W + 2*(X3)*X3'*W + 2*(X4)*X4'*W + 2*(X5)*X5'*W + 2*(X6)*X6'*W - 2*(X1*V1')*U' - 2*(X2*V2')*U' - 2*(X3*V3')*U' - 2*(X4*V4')*U' - 2*(X5*V5')*U' - 2*(X6*V6')*U' - 2*nu*X1*V1'*P1' - 2*nu*X2*V2'*P2' - 2*nu*X3*V3'*P3' - 2*nu*X4*V4'*P4' - 2*nu*X5*V5'*P5' - 2*nu*X6*V6'*P6' + 2*nu*(X1)*X1'*W*(P1'*P1) + 2*nu*(X2)*X2'*W*(P2'*P2) + 2*nu*(X3)*X3'*W*(P3'*P3) + 2*nu*(X4)*X4'*W*(P4'*P4) + 2*nu*(X5)*X5'*W*(P5'*P5) + 2*nu*(X6)*X6'*W*(P6'*P6);
             W = W - L*Vw;
         end
     end
@@ -125,11 +131,11 @@ imshow(images1(:,:,:,1));
     D = zeros(n,n);
     for m = 1:n
     
-        v1 = P1*W*(X12(:,m));
+        v1 = P1*W*(X1(:,m));
     
         for i = 1:n
-            v2 = P2*W*(X22(:,i));
-            D(m,i) = norm(((v1 - A*v2)));
+            v2 = P2*W*(X2(:,i));
+            D(m,i) = norm(((v1 - A12*v2)));
         end
         
     end

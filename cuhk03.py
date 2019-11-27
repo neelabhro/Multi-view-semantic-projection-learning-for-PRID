@@ -22,17 +22,24 @@ for j, i in enumerate(a):
 
 # print(names)
 # print(count)
-
 for j, i in enumerate(count):
+    # print(i == names[j])
+    # print(i, names[j])
     while(count[i] < 5):
         if(int(i[-1]) == 1):
-            shutil.copyfile("./"+names[j], "./"+names[j][:-6]+"0"+str(1+count[i])+".png")
-            print("created "+names[j][:-6]+"0"+str(1+count[i])+".png")
+            # shutil.copyfile("./"+names[j], "./"+names[j][:-6]+"0"+str(1+count[i])+".png")
+            # print("created "+names[j][:-6]+"0"+str(1+count[i])+".png")
+            shutil.copyfile("./"+i+"_01.png", "./"+i+"_0"+str(1+count[i])+".png")
+            print("created "+"./"+i+"_0"+str(1+count[i])+".png")
         else:
             if(count[i] == 4):
-                shutil.copyfile("./"+names[j], "./"+names[j][:-6]+str(6+count[i])+".png")
-                print("created "+names[j][:-6]+str(6+count[i])+".png")
+                # shutil.copyfile("./"+names[j], "./"+names[j][:-6]+str(6+count[i])+".png")
+                # print("created "+names[j][:-6]+str(6+count[i])+".png")
+                shutil.copyfile("./"+i+"_06.png", "./"+i+"_"+str(6+count[i])+".png")
+                print("created "+"./"+i+"_"+str(6+count[i])+".png")
             else:
-                shutil.copyfile("./"+names[j], "./"+names[j][:-6]+"0"+str(6+count[i])+".png")
-                print("created "+names[j][:-6]+"0"+str(6+count[i])+".png")
+                # shutil.copyfile("./"+names[j], "./"+names[j][:-6]+"0"+str(6+count[i])+".png")
+                # print("created "+names[j][:-6]+"0"+str(6+count[i])+".png")
+                shutil.copyfile("./"+i+"_06.png", "./"+i+"_0"+str(6+count[i])+".png")
+                print("created "+"./"+i+"_0"+str(6+count[i])+".png")
         count[i]+=1

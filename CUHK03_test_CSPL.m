@@ -6,16 +6,20 @@ clear;
 clc;                                                                                                            
 close all;
 
-feaFile = 'cuhk01_lomo.mat';
+feaFile = 'cuhk03-lomo-14670.mat';
 %pcaFile = 'cuhk01100.mat';
-pcaFile = 'CUHK01_PCA_test.mat';
+pcaFile = 'cuhk03_pca_14670.mat';
 numClass = 1367;
 numFolds = 10;
 numRanks = 100                                      ;                                                                     
 
 %% load the extracted LOMO features
 load(feaFile, 'descriptors');
+
+p = randperm(1467);
+
 camA1 = descriptors(:, 1:10:end);
+%camA1 = camA1(:,1:1474);
 camA2 = descriptors(:, 2:10:end);
 camA3 = descriptors(:, 3:10:end);
 camA4 = descriptors(:, 4:10:end);
@@ -27,7 +31,7 @@ camB3 = descriptors(:, 8:10:end);
 camB4 = descriptors(:, 9:10:end);
 camB5 = descriptors(:, 10:10:end);
 
-p = randperm(numClass);
+
 A = 1:1:13670;
 
 FirstElements  = A(:, 1:10:end);
@@ -86,7 +90,7 @@ probeFea2 = (probe1 + probe2 + probe3 + probe4 + probe5)./5;
     nu = 1;
     beta = 1;
 
-    n = 970;
+    n = 6835;
     d = 100;
     k = d;
     
@@ -98,6 +102,7 @@ probeFea2 = (probe1 + probe2 + probe3 + probe4 + probe5)./5;
     TestSet(1:100 ,:) = galFea2';
     TestSet(101: end,:) = probeFea2';
     
+    %[X ,W] = matlabPCA(TrainSet',100);
     %TestSet(1:485 ,:) = galFea4';
     %TestSet(486: end,:) = probeFea4';
     
@@ -154,14 +159,14 @@ probeFea2 = (probe1 + probe2 + probe3 + probe4 + probe5)./5;
         %W2 = inv((4*X1*X1' + 4*X2*X2' + Lw*eye(k) -X1*X2' -X2*X1'))*(X1*V1'*U' + X2*V2'*U' + X1*V1'*P1 + X2*V2'*P2);
         %W2 = W2';
         %W2 = eye(k);
-        for j = 1:50
+        %for j = 1:50
             
-            Vw = 4*W2'*(X1*X1') + 4*W2'*(X2*X2') - 2*(X1*V1')*U'  - 2*(X2*V2')*U' - 2*nu*X1*V1'*P1' - 2*nu*X2*V2'*P2' + 2*nu*(P1'*P1)*W2'*(X1*X1') + 2*nu*(P2'*P2)*W2'*(X2*X2') + 2*Lw*W2' - X1*X2' - X2*X1';
-            W2 = W2 - L*Vw;
+        %    Vw = 4*W2'*(X1*X1') + 4*W2'*(X2*X2') - 2*(X1*V1')*U'  - 2*(X2*V2')*U' - 2*nu*X1*V1'*P1' - 2*nu*X2*V2'*P2' + 2*nu*(P1'*P1)*W2'*(X1*X1') + 2*nu*(P2'*P2)*W2'*(X2*X2') + 2*Lw*W2' - X1*X2' - X2*X1';
+        %    W2 = W2 - L*Vw;
             
             %W=W./norm(W);
-        end 
-        W2 = W2';
+        %end 
+        %W2 = W2';
         
     end
 
